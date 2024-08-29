@@ -46,11 +46,11 @@
           if (file) {
                switch (props.command) {
                     case 'file_info':
-                         ffmpegService.infoFile(file);
+                         ffmpegService.getFileDetails(file);
                          break;
                     
                     case 'compression':
-                         ffmpegService.compressionFile(file);
+                         ffmpegService.optimizeFileSize(file);
                          emit('file-preview', URL.createObjectURL(file))
                          break;
                

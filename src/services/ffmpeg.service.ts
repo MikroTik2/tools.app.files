@@ -1,13 +1,14 @@
-import type { IVideoCompress } from '@/models/video-compress.model';
-import type { IVideoInfo } from '@/models/video-info.model';
+import { ref } from 'vue';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { FileTypeMap } from '@/data/constant';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
-import { ref } from 'vue';
 
-export const video = ref<string | null>(null);
-export const isLoading = ref<boolean>(false);
+import type { IVideoCompress } from '@/models/video-compress.model';
+import type { IVideoInfo } from '@/models/video-info.model';
+
+export const loading = ref<boolean>(false);
 export const progression = ref<number | null>(null);
+
 export const videoInfo = ref<IVideoInfo>({
      name: '',
      size: 0,
@@ -31,81 +32,59 @@ export class FFmpegService {
      private baseURL = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm';
      private ffmpeg = new FFmpeg();
 
-     public async compressionFile(file: File) {
+     public async optimizeFileSize(file: File) {
           this.reset()
-          isLoading.value = true;
+          loading.value = true;
 
-          this.ffmpeg.on('progress', ({ progress }) => {
-               progression.value = progress
-          });
+          try {
 
-          await this.loadFFmpeg();
-          await this.ffmpeg.writeFile(file.name, await fetchFile(file))
+               this.ffmpeg.on('progress', ({ progress }) => {
+                    progression.value = progress
+               });
+     
+               await this.loadFFmpeg();
+               await this.ffmpeg.writeFile(file.name, await fetchFile(file))
+     
+               await this.ffmpeg.exec([
+                    '-i', file.name, '-c:v', 'libx264', '-tag:v', 'avc1', '-movflags', 'faststart', '-crf', '30', 
+                    '-preset', 'superfast', '-progress', '-', '-v', '', '-y', 'output.mp4'
+               ]);
+     
+               const data = await this.readFile("output.mp4");
+     
+               videoCompress.value.size_original = file.size;
+               videoCompress.value.name = file.name;
+               videoCompress.value.size_compressed = data.length;
+     
+               videoCompress.value.video_blob = await this.getFileUrl('.', 'output', 'mp4');
 
-          await this.ffmpeg.exec([
-               '-i', file.name, '-c:v', 'libx264', '-tag:v', 'avc1', '-movflags', 'faststart', '-crf', '30', '-preset', 'superfast', '-progress', '-', '-v', '', '-y', 'output.mp4'
-          ]);
-
-          const data = await this.readFile("output.mp4");
-
-          videoCompress.value.size_original = file.size;
-          videoCompress.value.name = file.name;
-          videoCompress.value.size_compressed = data.length;
-
-          const blob = await this.getFileBlob('.', 'output', 'mp4');
-          videoCompress.value.video_blob = blob;
-
-          const url = await this.getFileUrl('.', 'output', 'mp4');
-          video.value = url;
-          isLoading.value = false;
+          } catch (err) {
+               console.error('Error during compression:', err);
+          } finally {
+               loading.value = false;
+          }
      };
 
-     public async infoFile(file: File) {
+     public async getFileDetails(file: File) {
           this.reset()
-          isLoading.value = true;
+          loading.value = true;
 
-          await this.loadFFmpeg();
-          this.ffmpeg.on('log', ({ message: msg }) => {
-               if (msg.includes('Duration:')) {
-                    const duration = msg.split('Duration:')[1].split(',')[0].trim();
-                    videoInfo.value.durationInSeconds = this.parseDuration(duration);
-               };
-
-               if (msg.includes('Stream #')) {
-                    if (msg.includes('Video:')) {
-                         videoInfo.value.videoCodec = msg.split('Video:')[1].split(' ')[1].split(',')[0];
-                         videoInfo.value.dimensions = this.parseDimensions(msg);
-                         videoInfo.value.fps = this.parseFPS(msg);
-                         videoInfo.value.name = file.name;
-                         videoInfo.value.size = file.size.toLocaleString();
-                         videoInfo.value.lastModified = new Date(file.lastModified).toLocaleString('ru-RU', {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              second: '2-digit',
-                         });
-
-                         videoInfo.value.type = file.type;
-                    };
-               
-                    if (msg.includes('Audio:')) {
-                         videoInfo.value.audioCodec = msg.split('Audio:')[1].split(' ')[1];
-                    } else {
-                         videoInfo.value.audioCodec = 'No Audio';
-                    };
-               };
-          });
-
-          await this.ffmpeg.writeFile(file.name, await fetchFile(file));
-          await this.ffmpeg.exec([`-i`, file.name, `-hide_banner`, `-v`, `verbose`]);
-
-          isLoading.value = false;
+          try {
+               await this.loadFFmpeg();
+               this.ffmpeg.on('log', ({ message }) => {
+                    this.extractFileInfo(message, file);
+               });
+     
+               await this.ffmpeg.writeFile(file.name, await fetchFile(file));
+               await this.ffmpeg.exec([`-i`, file.name, `-hide_banner`, `-v`, `verbose`]);
+          } catch (err) {
+               console.error('Error during info:', err);
+          } finally {
+               loading.value = false;
+          };
      };
 
-     public async reset() {
-          video.value = null;
+     public reset() {
           videoInfo.value = {
                name: '',
                size: 0,
@@ -123,7 +102,7 @@ export class FFmpegService {
                name: '',
                video_blob: '',
           };
-          isLoading.value = false;
+          loading.value = false;
           progression.value = null;
      };
 
@@ -160,6 +139,32 @@ export class FFmpegService {
                    'text/javascript',
                ),
           });
+     };
+
+     private extractFileInfo(message: string, file: File) {
+          if (message.includes('Duration:')) {
+               videoInfo.value.durationInSeconds = this.parseDuration(message.split('Duration:')[1].split(',')[0].trim());
+          };
+
+          if (message.includes('Stream #')) {
+               if (message.includes('Video:')) {
+                    const videoCodec = message.split('Video:')[1].split(' ')[1].split(',')[0];
+                    videoInfo.value.videoCodec = videoCodec;
+                    videoInfo.value.dimensions = this.parseDimensions(message);
+                    videoInfo.value.fps = this.parseFPS(message);
+                    videoInfo.value = {
+                         ...videoInfo.value,
+                         name: file.name,
+                         size: file.size,
+                         lastModified: new Date(file.lastModified).toLocaleString('ru-RU'),
+                         type: file.type,
+                    };
+               };
+
+               if (message.includes('Audio:')) {
+                    videoInfo.value.audioCodec = message.split('Audio:')[1].split(' ')[1] || 'No Audio';
+               };
+          };
      };
 
      private parseDuration(duration: string) {

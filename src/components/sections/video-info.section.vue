@@ -20,7 +20,7 @@
                     />
                </div>
 
-               <Loader v-else-if="isLoading" />
+               <Loader v-else-if="loading" />
 
                <div class="flex w-full flex-col gap-2" v-else>
                     <h1 class="text-2xl font-bold">Video information</h1>
@@ -54,7 +54,7 @@
      import type { ICardItem } from '@/models/card-items.model';
 
      import { computed, ref } from 'vue';
-     import { videoInfo, isLoading } from '@/services/ffmpeg.service';
+     import { videoInfo, loading } from '@/services/ffmpeg.service';
 
      const fileSelected = ref<boolean>(true);
 

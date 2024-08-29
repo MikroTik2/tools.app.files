@@ -8,25 +8,29 @@ import autoprefixer from 'autoprefixer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    server: {
+        open: true,
+        host: true,
+        port: 8080,
+        
+        headers: {
+          'Cross-Origin-Opener-Policy': 'same-origin',
+          'Cross-Origin-Embedder-Policy': 'require-corp'
+        },
+    },
+
     plugins: [
         vue(),
     ],
     
-    css: {
-        postcss: {
-            plugins: [tailwind(), autoprefixer()],
-        },
-    },
-
     optimizeDeps: {
         exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
     },
 
-    server: {
-        headers: {
-          'Cross-Origin-Opener-Policy': 'same-origin',
-          'Cross-Origin-Embedder-Policy': 'require-corp'
-        }
+    css: {
+        postcss: {
+            plugins: [tailwind(), autoprefixer()],
+        },
     },
 
     resolve: {

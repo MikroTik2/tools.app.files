@@ -163,7 +163,6 @@ const handleRestartVideo = () => {
 const handleUpdateSlider = () => {
      if (videoPlayer.value) {
           videoSlide.value = [videoPlayer.value.currentTime / videoPlayer.value.duration * 1000];
-          console.log(videoSlide.value);
      };
 };
 </script>
