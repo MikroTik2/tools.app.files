@@ -1,0 +1,15 @@
+.group {
+     flex-grow: 1;
+}
+
+.saturate-0 {
+     filter: none;
+}
+
+.grid-card {
+     @media screen and (max-width: 288px) {
+          display: grid;
+          gap: 20px;
+          justify-content: center;
+     }
+}
