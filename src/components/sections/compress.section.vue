@@ -43,6 +43,7 @@
                          </div>
 
                          {{ videoPreviewUrl }}
+                         {{ progression }}
 
                          <div class="w-full flex pt-1 items-center gap-4">
                               <button type="button" @click="handleTrackPlayPause">
