@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-     import Compress from '@/components/sections/compress.section.vue'
+import Compress from '@/components/sections/compress.section.vue';
 </script>

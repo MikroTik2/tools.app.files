@@ -5,5 +5,5 @@
 </template>
 
 <script setup lang="ts">
-     import Tools from '@/components/sections/tools.section.vue'
+import Tools from '@/components/sections/tools.section.vue';
 </script>

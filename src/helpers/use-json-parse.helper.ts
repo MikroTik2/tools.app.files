@@ -6,7 +6,7 @@ export function useJsonParse(str: string): any {
      } catch (error) {
           res = '';
           throw error;
-     };
+     }
 
      return res;
-};
+}

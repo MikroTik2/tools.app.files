@@ -5,5 +5,5 @@ export const FileTypeMap = {
      gif: 'image/gif',
      mp3: 'audio/mp3',
      mp4: 'video/mpeg4',
-     aac: 'audio/x-mei-aac'
+     aac: 'audio/x-mei-aac',
 };

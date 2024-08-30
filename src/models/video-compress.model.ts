@@ -3,4 +3,4 @@ export interface IVideoCompress {
      size_original: number;
      name: string;
      video_blob: any;
-};
+}

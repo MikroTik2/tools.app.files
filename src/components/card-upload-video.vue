@@ -14,11 +14,11 @@
 
                     <div class="flex text-center flex-col items-center justify-center gap-2">
                          <div>{{ props.title }}</div>
-                         <div  class="text-sm text-muted-foreground max-w-[300px] text-center">
+                         <div class="text-sm text-muted-foreground max-w-[300px] text-center">
                               {{ props.description }}
                          </div>
                     </div>
-                    
+
                     <Button type="button" @click="fileInput?.click()">Select File</Button>
                </div>
           </div>
@@ -26,39 +26,39 @@
 </template>
 
 <script setup lang="ts">
-     import Button from '@/components/ui/button.vue';
+import Button from '@/components/ui/button.vue';
 
-     import type { IPropsCardUploadVideo } from '@/models/card-upload-video.model';
+import type { IPropsCardUploadVideo } from '@/models/card-upload-video.model';
 
-     import { ref } from 'vue';
-     import { ArrowUpFromLine } from 'lucide-vue-next';
-     import { ffmpegService } from '@/services/ffmpeg.service';
+import { ref } from 'vue';
+import { ArrowUpFromLine } from 'lucide-vue-next';
+import { ffmpegService } from '@/services/ffmpeg.service';
 
-     const fileInput = ref<HTMLInputElement | null>(null);
+const fileInput = ref<HTMLInputElement | null>(null);
 
-     const props = defineProps<IPropsCardUploadVideo>();
-     const emit = defineEmits(['file-selected', 'file-preview']);
+const props = defineProps<IPropsCardUploadVideo>();
+const emit = defineEmits(['file-selected', 'file-preview']);
 
-     const handleFileChange = (event: Event) => {
-          const input = event.target as HTMLInputElement;
-          const file = input.files?.[0];
+const handleFileChange = (event: Event) => {
+     const input = event.target as HTMLInputElement;
+     const file = input.files?.[0];
 
-          if (file) {
-               switch (props.command) {
-                    case 'file_info':
-                         ffmpegService.getFileDetails(file);
-                         break;
-                    
-                    case 'compression':
-                         ffmpegService.optimizeFileSize(file);
-                         emit('file-preview', URL.createObjectURL(file))
-                         break;
-               
-                    default:
-                         throw 'Unknown command';
-               };
+     if (file) {
+          switch (props.command) {
+               case 'file_info':
+                    ffmpegService.getFileDetails(file);
+                    break;
 
-               emit('file-selected', false);
-          };
-     };
+               case 'compression':
+                    ffmpegService.optimizeFileSize(file);
+                    emit('file-preview', URL.createObjectURL(file));
+                    break;
+
+               default:
+                    throw 'Unknown command';
+          }
+
+          emit('file-selected', false);
+     }
+};
 </script>

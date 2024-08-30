@@ -9,24 +9,26 @@
                <Button type="link" :href="props.link">{{ props.text }}</Button>
 
                <div class="inline-flex gap-2">
-                    <Badge variant="outline" :key="i" v-for="(element, i) in props.tags">{{ element }}</Badge>
+                    <Badge variant="outline" :key="i" v-for="(element, i) in props.tags">{{
+                         element
+                    }}</Badge>
                </div>
           </div>
      </Card>
 </template>
 
 <script setup lang="ts">
-     import { Card } from '@/components/ui/card';
-     import { Badge } from '@/components/ui/badge';
-     import Button from '@/components/ui/button.vue';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import Button from '@/components/ui/button.vue';
 
-     interface IPropsCard {
-          title: string;
-          description: string;
-          text: string;
-          link: string;
-          tags: string[];
-     };
+interface IPropsCard {
+     title: string;
+     description: string;
+     text: string;
+     link: string;
+     tags: string[];
+}
 
-     const props = defineProps<IPropsCard>();
+const props = defineProps<IPropsCard>();
 </script>

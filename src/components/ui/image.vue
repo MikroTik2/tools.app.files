@@ -8,11 +8,11 @@
 </template>
 
 <script setup lang="ts">
-     interface IImageProps {
-          src: string
-          alt: string
-          isAboveTheFold?: boolean
-     };
+interface IImageProps {
+     src: string;
+     alt: string;
+     isAboveTheFold?: boolean;
+}
 
-     const props = defineProps<IImageProps>()
+const props = defineProps<IImageProps>();
 </script>

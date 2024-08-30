@@ -7,12 +7,14 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "test:unit": "vitest",
-    "test:e2e": "playwright test",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{js,vue,html,css}": "prettier --write",
+    "src/**/*.{js,vue}": "eslint --fix"
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.10",
@@ -35,10 +37,10 @@
   },
   "devDependencies": {
     "@ffmpeg/core": "^0.12.6",
-    "@playwright/test": "^1.44.1",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/file-saver": "^2.0.7",
+    "@types/jest": "^29.5.12",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^20.14.5",
     "@vitejs/plugin-vue": "^5.0.5",
@@ -48,9 +50,10 @@
     "@vue/tsconfig": "^0.5.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
-    "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-vue": "^9.23.0",
+    "husky": "^8.0.0",
     "jsdom": "^24.1.0",
+    "lint-staged": "^15.2.9",
     "npm-run-all2": "^6.2.0",
     "prettier": "^3.2.5",
     "sass": "^1.77.8",

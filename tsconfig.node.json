@@ -5,8 +5,7 @@
     "vitest.config.*",
     "cypress.config.*",
     "nightwatch.conf.*",
-    "playwright.config.*"
-, "e2e/playwright.config.ts"  ],
+  ],
   "compilerOptions": {
     "composite": true,
     "noEmit": true,
