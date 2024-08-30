@@ -42,8 +42,7 @@
                               </div>
                          </div>
 
-                         {{ videoCompress.video_blob }}
-                         {{ videoPreviewUrl }}
+                         <video v-if="videoPreviewUrl" controls :src="videoPreviewUrl" />
 
                          <div class="w-full flex pt-1 items-center gap-4">
                               <button type="button" @click="handleTrackPlayPause">
