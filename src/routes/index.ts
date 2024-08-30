@@ -4,6 +4,7 @@ import type { RouteRecordRaw } from 'vue-router';
 import Tools from '@/views/tools.vue';
 import Compress from '@/views/compress.vue';
 import VideoInfo from '@/views/video-info.vue';
+import NotFound from  '@/views/not-found.vue';
 
 const routes: RouteRecordRaw[] = [
      { path: '/', name: 'index', component: Tools, meta: { title: 'Video file compressor' } },
@@ -18,6 +19,12 @@ const routes: RouteRecordRaw[] = [
           name: 'compress',
           component: VideoInfo,
           meta: { title: 'Rotato Video Info' },
+     },
+     {
+          path: '/:pathMatch(.*)*',
+          name: 'not-found',
+          component: NotFound,
+          meta: { title: '404: This is page could not be found' },
      },
 ];
 
