@@ -42,9 +42,6 @@
                               </div>
                          </div>
 
-                         {{ videoPreviewUrl }}
-                         {{ progression }}
-
                          <div class="w-full flex pt-1 items-center gap-4">
                               <button type="button" @click="handleTrackPlayPause">
                                    <Pause class="w-5 h-5" v-if="startTrack" />
@@ -80,9 +77,10 @@
                                    </div>
 
                                    <Button
-                                        type="button"
+                                        @click="handleRemove"
                                         :disabled="progressionValue[0] !== 1"
                                         variant="secondary"
+                                        type="button"
                                    >
                                         <Trash2 />
                                    </Button>
@@ -158,12 +156,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Pause, Trash2, Play } from 'lucide-vue-next';
-import { progression } from '@/services/ffmpeg.service';
+import { ffmpegService, progression } from '@/services/ffmpeg.service';
 import { humanFileSize } from '@/helpers/use-format-bytes';
 
 import { videoCompress } from '@/services/ffmpeg.service';
 import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
 import { useDownloadFile } from '@/helpers/use-download-file.helper';
+
+import { useRouter } from 'vue-router';
 
 import CardUploadVideo from '@/components/card-upload-video.vue';
 import CardDekstop from '@/components/card-dekstop.vue';
@@ -180,6 +180,15 @@ const videoSlide = ref<number[]>([0]);
 const startTrack = ref<boolean>(false);
 
 const progressionValue = computed(() => [parseFloat(Number(progression.value).toFixed(3))]);
+
+const router = useRouter();
+
+const handleRemove = () => {
+     ffmpegService.reset();
+     videoPreviewUrl.value = null;
+
+     router.push('/');
+};
 
 const handlePreviewVideo = (video: string) => {
      videoPreviewUrl.value = video;
