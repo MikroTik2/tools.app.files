@@ -42,6 +42,9 @@
                               </div>
                          </div>
 
+                         {{ videoCompress.video_blob }}
+                         {{ videoPreviewUrl }}
+
                          <div class="w-full flex pt-1 items-center gap-4">
                               <button type="button" @click="handleTrackPlayPause">
                                    <Pause class="w-5 h-5" v-if="startTrack" />
