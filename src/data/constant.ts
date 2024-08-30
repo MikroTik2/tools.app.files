@@ -4,6 +4,6 @@ export const FileTypeMap = {
      jpg: 'image/jpeg',
      gif: 'image/gif',
      mp3: 'audio/mp3',
-     mp4: 'video/mpeg4',
+     mp4: 'video/mp4',
      aac: 'audio/x-mei-aac',
 };
