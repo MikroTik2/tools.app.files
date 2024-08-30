@@ -31,6 +31,12 @@
                                         @ended="handleRestartVideo"
                                    />
                                    <video
+                                        class="w-full h-full object-contain opacity-50"
+                                        v-else
+                                        controls
+                                        :src="videoPreviewUrl || ''"
+                                   />
+                                   <!-- <video
                                         :src="videoPreviewUrl ?? ''"
                                         :class="{
                                              'w-full h-full object-contain opacity-50':
@@ -38,7 +44,7 @@
                                         }"
                                         class="w-full saturate-0 h-full opacity-50 object-contain"
                                         v-else
-                                   />
+                                   /> -->
                               </div>
                          </div>
 
