@@ -71,8 +71,8 @@ export class FFmpegService {
                videoCompress.value.size_original = file.size;
                videoCompress.value.name = file.name;
                videoCompress.value.size_compressed = data.length;
-
-               videoCompress.value.video_blob = URL.createObjectURL(new File([data], 'video.mp4', { type: 'video/mp4' }));
+               videoCompress.value.video_blob = await this.getFileUrl('.', 'output', 'mp4');
+               
           } catch (err) {
                console.error('Error during compression:', err);
           } finally {

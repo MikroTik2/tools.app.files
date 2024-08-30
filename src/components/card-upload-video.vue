@@ -51,7 +51,10 @@ const handleFileChange = (event: Event) => {
 
                case 'compression':
                     ffmpegService.optimizeFileSize(file);
-                    emit('file-preview', URL.createObjectURL(file));
+                    emit(
+                         'file-preview',
+                         URL.createObjectURL(new Blob([file], { type: 'video/mp4' })),
+                    );
                     break;
 
                default:
