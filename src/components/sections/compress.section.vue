@@ -58,9 +58,7 @@
                               <Slider v-model="progressionValue" :max="1" :min="0" v-else />
                          </div>
 
-                         <div
-                              class="grid md:grid-cols-2 grid-cols-1 gap-4 pt-6 w-full max-h-min h-[30%]"
-                         >
+                         <div class="grid md:grid-cols-2 grid-cols-1 gap-4 pt-6 w-full">
                               <div
                                    style="align-items: center"
                                    class="bg-foreground/5 border w-full p-5 overflow-hidden grid-card rounded-2xl flex justify-between"

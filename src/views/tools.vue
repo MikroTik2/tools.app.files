@@ -1,5 +1,5 @@
 <template>
-     <main class="flex flex-col items-center justify-center mt-[5vh]">
+     <main class="flex flex-col items-center justify-center py-5">
           <Tools />
      </main>
 </template>

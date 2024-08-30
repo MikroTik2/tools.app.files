@@ -19,6 +19,10 @@ const routes: RouteRecordRaw[] = [
           component: VideoInfo,
           meta: { title: 'Rotato Video Info' },
      },
+     {
+          path: '/:pathMatch(.*)*',
+          redirect: '/'
+     },
 ];
 
 const router = createRouter({
