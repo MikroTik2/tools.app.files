@@ -11,12 +11,11 @@ export default defineConfig({
     server: {
         open: true,
         host: true,
-        port: 8080,
-        
+        port: 3000,
         headers: {
-          'Cross-Origin-Opener-Policy': 'same-origin',
-          'Cross-Origin-Embedder-Policy': 'require-corp'
-        },
+            "Cross-Origin-Embedder-Policy": "require-corp",
+            "Cross-Origin-Opener-Policy": "same-origin",
+        }
     },
 
     plugins: [
@@ -24,7 +23,7 @@ export default defineConfig({
     ],
     
     optimizeDeps: {
-        exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util']
+        exclude: ["@ffmpeg/ffmpeg", "@ffmpeg/util"],
     },
 
     css: {

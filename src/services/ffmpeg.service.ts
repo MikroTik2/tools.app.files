@@ -85,6 +85,7 @@ export class FFmpegService {
           loading.value = true;
 
           try {
+
                await this.loadFFmpeg();
                this.ffmpeg.on('log', ({ message }) => {
                     this.extractFileInfo(message, file);
