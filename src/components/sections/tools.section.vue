@@ -37,6 +37,14 @@ const toolsItems = ref([
           tags: ['Web'],
      },
      {
+          title: 'Video to GIF Conversion',
+          description:
+               'Convert a video file to GIF format. Specify the output dimensions, frame rate, and quality. No data is sent or uploaded during the conversion process.',
+          link: '/video-to-gif',
+          text: 'Convert Video to GIF',
+          tags: ['Web'],
+     },
+     {
           title: 'Video transparency tester',
           description: 'See if a video has an alpha channel',
           link: 'https://rotato.app/tools/transparent-video',

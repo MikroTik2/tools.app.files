@@ -10,6 +10,12 @@ import type { IVideoInfo } from '@/models/video-info.model';
 export const loading = ref<boolean>(false);
 export const progression = ref<number | null>(null);
 
+export const videoConvertToGif = ref({
+     size_original: 0,
+     gif_blob: '',
+     name: '',
+});
+
 export const videoInfo = ref<IVideoInfo>({
      name: '',
      size: 0,
@@ -79,6 +85,37 @@ export class FFmpegService {
           }
      }
 
+     public async convertToGif(file: File) {
+          this.reset()
+          loading.value = true;
+
+          try {
+
+               this.ffmpeg.on('progress', ({ progress }) => {
+                    progression.value = progress;
+               });
+
+               await this.loadFFmpeg();
+               await this.ffmpeg.writeFile(file.name, await fetchFile(file));
+               
+               await this.ffmpeg.exec([
+                    '-i', file.name,
+                    'output.gif',
+               ]);
+
+               const data = await this.readFile('output.gif');
+
+               videoConvertToGif.value.size_original = data.length;
+               videoConvertToGif.value.name = 'output.gif';
+               videoConvertToGif.value.gif_blob = await this.getFileUrl('.', 'output', 'gif');
+
+          } catch (err) {
+               console.error('Error during convert to gif:', err);
+          } finally {
+               loading.value = false;
+          };
+     };
+
      public async getFileDetails(file: File) {
           this.reset();
           loading.value = true;
@@ -110,6 +147,13 @@ export class FFmpegService {
                dimensions: { width: 0, height: 0 },
                fps: 0,
           };
+
+          videoConvertToGif.value = {
+               size_original: 0,
+               gif_blob: '',
+               name: '',
+          };
+
           videoCompress.value = {
                size_compressed: 0,
                size_original: 0,

@@ -45,12 +45,20 @@ const handleFileChange = (event: Event) => {
 
      if (file) {
           switch (props.command) {
-               case 'file_info':
+               case 'getFileDetails':
                     ffmpegService.getFileDetails(file);
                     break;
 
-               case 'compression':
+               case 'optimizeFileSize':
                     ffmpegService.optimizeFileSize(file);
+                    emit(
+                         'file-preview',
+                         URL.createObjectURL(new Blob([file], { type: 'video/mp4' })),
+                    );
+                    break;
+
+               case 'convertToGif':
+                    ffmpegService.convertToGif(file);
                     emit(
                          'file-preview',
                          URL.createObjectURL(new Blob([file], { type: 'video/mp4' })),

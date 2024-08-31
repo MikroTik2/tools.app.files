@@ -41,6 +41,25 @@
                Download
           </Button>
 
+          <div class="grid gap-4" v-if="format === 'gif'">
+               <Button
+                    type="button"
+                    variant="secondary"
+                    @click="handleRemove"
+                    :disabled="props.disabled !== 1"
+               >
+                    <Trash2 />
+               </Button>
+
+               <Button
+                    type="button"
+                    @click="useDownloadFile(props.video, props.name)"
+                    :disabled="props.disabled !== 1"
+               >
+                    Download
+               </Button>
+          </div>
+
           <Button
                type="button"
                v-if="format === 'trash'"

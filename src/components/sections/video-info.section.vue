@@ -17,7 +17,7 @@
                     <CardUploadVideo
                          title="Drag and drop video file to compress"
                          description="Compression happens on your device, no data is sent to our servers"
-                         command="file_info"
+                         command="getFileDetails"
                          @file-selected="handleFileSelected"
                     />
                </div>

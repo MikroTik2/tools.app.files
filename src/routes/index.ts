@@ -4,6 +4,7 @@ import type { RouteRecordRaw } from 'vue-router';
 import Tools from '@/views/tools.vue';
 import Compress from '@/views/compress.vue';
 import VideoInfo from '@/views/video-info.vue';
+import ConvertGif from '@/views/convert-gif.vue';
 import NotFound from '@/views/not-found.vue';
 
 const routes: RouteRecordRaw[] = [
@@ -19,6 +20,12 @@ const routes: RouteRecordRaw[] = [
           name: 'compress',
           component: VideoInfo,
           meta: { title: 'Rotato Video Info' },
+     },
+     {
+          path: '/video-to-gif',
+          name: 'video-to-gif',
+          component: ConvertGif,
+          meta: { title: 'Video to GIF Converter' },
      },
      {
           path: '/:pathMatch(.*)*',

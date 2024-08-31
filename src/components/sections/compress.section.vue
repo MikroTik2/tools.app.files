@@ -7,7 +7,7 @@
                     <CardUploadVideo
                          title="Drag and drop video file to compress"
                          description="Compression happens on your device, no data is sent to our servers"
-                         command="compression"
+                         command="optimizeFileSize"
                          @file-preview="handlePreviewVideo"
                          @file-selected="handleFileSelected"
                     />
@@ -99,12 +99,10 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { Pause, Trash2, Play } from 'lucide-vue-next';
-import { ffmpegService, progression } from '@/services/ffmpeg.service';
+import { Pause, Play } from 'lucide-vue-next';
+import { videoCompress, ffmpegService, progression } from '@/services/ffmpeg.service';
 import { humanFileSize } from '@/helpers/use-format-bytes.helper';
 import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
-
-import { videoCompress } from '@/services/ffmpeg.service';
 
 import { useRouter } from 'vue-router';
 
@@ -115,7 +113,6 @@ import Slider from '@/components/ui/slider/Slider.vue';
 import Container from '@/components/ui/container.vue';
 import Footer from '@/components/layouts/footer.vue';
 import Section from '@/components/ui/section.vue';
-import Button from '@/components/ui/button.vue';
 
 const videoPlayer = ref<HTMLVideoElement | null>(null);
 const videoPreviewUrl = ref<string | null>(null);
