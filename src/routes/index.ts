@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from 'vue-router';
 import Tools from '@/views/tools.vue';
 import Compress from '@/views/compress.vue';
 import VideoInfo from '@/views/video-info.vue';
-import NotFound from  '@/views/not-found.vue';
+import NotFound from '@/views/not-found.vue';
 
 const routes: RouteRecordRaw[] = [
      { path: '/', name: 'index', component: Tools, meta: { title: 'Video file compressor' } },

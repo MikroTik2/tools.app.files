@@ -72,7 +72,6 @@ export class FFmpegService {
                videoCompress.value.name = file.name;
                videoCompress.value.size_compressed = data.length;
                videoCompress.value.video_blob = await this.getFileUrl('.', 'output', 'mp4');
-               
           } catch (err) {
                console.error('Error during compression:', err);
           } finally {
@@ -85,7 +84,6 @@ export class FFmpegService {
           loading.value = true;
 
           try {
-
                await this.loadFFmpeg();
                this.ffmpeg.on('log', ({ message }) => {
                     this.extractFileInfo(message, file);

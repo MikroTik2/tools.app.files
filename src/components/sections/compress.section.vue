@@ -30,6 +30,7 @@
                                         @timeupdate="handleUpdateSlider"
                                         @ended="handleRestartVideo"
                                    />
+
                                    <video
                                         :src="videoPreviewUrl ?? ''"
                                         :class="{
@@ -59,87 +60,30 @@
                          </div>
 
                          <div class="grid md:grid-cols-2 grid-cols-1 gap-4 pt-6 w-full">
-                              <div
-                                   style="align-items: center"
-                                   class="bg-foreground/5 border w-full p-5 overflow-hidden grid-card rounded-2xl flex justify-between"
-                              >
-                                   <div>
-                                        <div class="text-[0.7rem] uppercase text-muted-foreground">
-                                             Original
-                                        </div>
-                                        <div
-                                             class="text-3xl font-bold tracking-tight flex items-end gap-2"
-                                        >
-                                             <span>{{
-                                                  humanFileSize(videoCompress.size_original)
-                                             }}</span>
-                                        </div>
-                                   </div>
-
-                                   <Button
-                                        @click="handleRemove"
-                                        :disabled="progressionValue[0] !== 1"
-                                        variant="secondary"
-                                        type="button"
-                                   >
-                                        <Trash2 />
-                                   </Button>
-                              </div>
-                              <div
-                                   style="align-items: center"
-                                   class="bg-foreground/5 border w-full p-5 overflow-hidden grid-card rounded-2xl flex justify-between"
-                              >
-                                   <div>
-                                        <div class="text-[0.7rem] uppercase text-muted-foreground">
-                                             Compressed
-                                        </div>
-                                        <div
-                                             class="text-3xl font-bold tracking-tight flex items-end gap-2"
-                                        >
-                                             <span>{{
-                                                  humanFileSize(videoCompress.size_compressed)
-                                             }}</span>
-                                        </div>
-
-                                        <div class="overflow-hidden">
-                                             <div
-                                                  class="overflow-hidden"
-                                                  style="
-                                                       will-change: auto;
-                                                       opacity: 1;
-                                                       transform: translateY(0%);
-                                                  "
-                                             >
-                                                  <div
-                                                       class="bg-lime-300 mt-1 text-black font-medium opacity-1 rounded-sm text-sm w-max px-2 py-1 flex items-center justify-center"
-                                                       :class="{
-                                                            'opacity-1': progressionValue[0] === 1,
-                                                            'opacity-0': progressionValue[0] !== 1,
-                                                       }"
-                                                  >
-                                                       {{
-                                                            useCompressionStats(
-                                                                 videoCompress.size_original,
-                                                                 videoCompress.size_compressed,
-                                                            )
-                                                       }}% Smaller
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-
-                                   <Button
-                                        type="button"
-                                        @click="
-                                             useDownloadFile(
-                                                  videoCompress.video_blob,
-                                                  videoCompress.name,
-                                             )
-                                        "
-                                        :disabled="progressionValue[0] !== 1"
-                                        >Download</Button
-                                   >
-                              </div>
+                              <CardInfo
+                                   title="Original"
+                                   variant="secondary"
+                                   :size_original="videoCompress.size_original"
+                                   :disabled="progressionValue[0]"
+                                   @clear="handleRemove"
+                                   :size="humanFileSize(videoCompress.size_original)"
+                                   format="trash"
+                              />
+                              <CardInfo
+                                   title="Compressed"
+                                   variant="default"
+                                   format="download"
+                                   :stats="
+                                        useCompressionStats(
+                                             videoCompress.size_original,
+                                             videoCompress.size_compressed,
+                                        )
+                                   "
+                                   :size="humanFileSize(videoCompress.size_compressed)"
+                                   :video="videoCompress.video_blob"
+                                   :name="videoCompress.name"
+                                   :disabled="progressionValue[0]"
+                              />
                          </div>
 
                          <CardDekstop />
@@ -157,14 +101,14 @@
 import { computed, ref } from 'vue';
 import { Pause, Trash2, Play } from 'lucide-vue-next';
 import { ffmpegService, progression } from '@/services/ffmpeg.service';
-import { humanFileSize } from '@/helpers/use-format-bytes';
+import { humanFileSize } from '@/helpers/use-format-bytes.helper';
+import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
 
 import { videoCompress } from '@/services/ffmpeg.service';
-import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
-import { useDownloadFile } from '@/helpers/use-download-file.helper';
 
 import { useRouter } from 'vue-router';
 
+import CardInfo from '@/components/card-info.vue';
 import CardUploadVideo from '@/components/card-upload-video.vue';
 import CardDekstop from '@/components/card-dekstop.vue';
 import Slider from '@/components/ui/slider/Slider.vue';
