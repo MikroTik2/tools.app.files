@@ -107,7 +107,7 @@ import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
 import { useRouter } from 'vue-router';
 
 import CardInfo from '@/components/card-info.vue';
-import CardUploadVideo from '@/components/card-upload-video.vue';
+import CardUploadVideo from '@/components/card-dragdrop.vue';
 import CardDekstop from '@/components/card-dekstop.vue';
 import Slider from '@/components/ui/slider/Slider.vue';
 import Container from '@/components/ui/container.vue';

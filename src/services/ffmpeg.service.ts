@@ -86,35 +86,30 @@ export class FFmpegService {
      }
 
      public async convertToGif(file: File) {
-          this.reset()
+          this.reset();
           loading.value = true;
 
           try {
-
                this.ffmpeg.on('progress', ({ progress }) => {
                     progression.value = progress;
                });
 
                await this.loadFFmpeg();
                await this.ffmpeg.writeFile(file.name, await fetchFile(file));
-               
-               await this.ffmpeg.exec([
-                    '-i', file.name,
-                    'output.gif',
-               ]);
+
+               await this.ffmpeg.exec(['-i', file.name, 'output.gif']);
 
                const data = await this.readFile('output.gif');
 
                videoConvertToGif.value.size_original = data.length;
                videoConvertToGif.value.name = 'output.gif';
                videoConvertToGif.value.gif_blob = await this.getFileUrl('.', 'output', 'gif');
-
           } catch (err) {
                console.error('Error during convert to gif:', err);
           } finally {
                loading.value = false;
-          };
-     };
+          }
+     }
 
      public async getFileDetails(file: File) {
           this.reset();

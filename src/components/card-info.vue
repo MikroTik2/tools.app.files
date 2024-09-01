@@ -24,8 +24,7 @@
                                    'opacity-0': props.disabled !== 1,
                               }"
                          >
-                              {{ props.stats }}
-                              % Smaller
+                              {{ props.stats }}% Smaller
                          </div>
                     </div>
                </div>
@@ -53,6 +52,7 @@
 
                <Button
                     type="button"
+                    @keydown.enter="useDownloadFile(props.video, props.name)"
                     @click="useDownloadFile(props.video, props.name)"
                     :disabled="props.disabled !== 1"
                >

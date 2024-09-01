@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import CardUploadVideo from '@/components/card-upload-video.vue';
+import CardUploadVideo from '@/components/card-dragdrop.vue';
 import Container from '@/components/ui/container.vue';
 import Footer from '@/components/layouts/footer.vue';
 import Section from '@/components/ui/section.vue';
