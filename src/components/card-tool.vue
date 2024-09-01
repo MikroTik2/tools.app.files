@@ -20,15 +20,10 @@
 <script setup lang="ts">
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+
+import type { IPropsCardTools } from '@/models/card-tools.model';
+
 import Button from '@/components/ui/button.vue';
 
-interface IPropsCard {
-     title: string;
-     description: string;
-     text: string;
-     link: string;
-     tags: string[];
-}
-
-const props = defineProps<IPropsCard>();
+const props = defineProps<IPropsCardTools>();
 </script>

@@ -8,11 +8,7 @@
 </template>
 
 <script setup lang="ts">
-interface IImageProps {
-     src: string;
-     alt: string;
-     isAboveTheFold?: boolean;
-}
+import type { IImageProps } from '@/models/image.model';
 
 const props = defineProps<IImageProps>();
 </script>

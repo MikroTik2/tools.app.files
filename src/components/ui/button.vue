@@ -21,12 +21,7 @@
 import { buttonVariants, Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-interface IButtonProps {
-     type: string;
-     href?: string;
-     disabled?: boolean;
-     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-}
+import type { IButtonProps } from '@/models/button.model';
 
 const props = defineProps<IButtonProps>();
 </script>

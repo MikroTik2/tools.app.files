@@ -6,10 +6,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-
-interface IContainerProps {
-     class?: string;
-}
+import type { IContainerProps } from '@/models/container.model';
 
 const props = defineProps<IContainerProps>();
 

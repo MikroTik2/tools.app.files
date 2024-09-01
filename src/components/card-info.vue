@@ -74,21 +74,11 @@
 
 <script setup lang="ts">
 import { useDownloadFile } from '@/helpers/use-download-file.helper';
-
 import { Trash2 } from 'lucide-vue-next';
 
-import Button from '@/components/ui/button/Button.vue';
+import type { ICardInfo } from '@/models/card-info.model.ts';
 
-export interface ICardInfo {
-     title: string;
-     size?: any;
-     stats?: number;
-     format?: string;
-     video?: any;
-     name?: any;
-     disabled: number;
-     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-}
+import Button from '@/components/ui/button/Button.vue';
 
 const emits = defineEmits(['clear']);
 const props = defineProps<ICardInfo>();
