@@ -34,11 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import Button from '@/components/ui/button.vue';
-import type { IPropsCardUploadVideo } from '@/models/card-upload-video.model';
 import { ref } from 'vue';
 import { ArrowUpFromLine } from 'lucide-vue-next';
 import { ffmpegService } from '@/services/ffmpeg.service';
+
+import type { IPropsCardUploadVideo } from '@/models/card-upload-video.model';
+
+import Button from '@/components/ui/button.vue';
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const isDragging = ref<boolean>(false);
@@ -47,11 +49,28 @@ const props = defineProps<IPropsCardUploadVideo>();
 const emit = defineEmits(['file-selected', 'file-preview']);
 
 const handleFileChange = (event: Event) => {
-     const input = event.target as HTMLInputElement;
-     const file = input.files?.[0];
+     try {
+          const input = event.target as HTMLInputElement;
+          const file = input.files?.[0];
 
-     if (file) {
-          processFile(file);
+          if (file) {
+               processFile(file);
+          }
+     } catch (e) {
+          console.log(e);
+     }
+};
+
+const handleDrop = (event: DragEvent) => {
+     try {
+          const file = event.dataTransfer?.files?.[0];
+          isDragging.value = false;
+
+          if (file) {
+               processFile(file);
+          }
+     } catch (e) {
+          console.log(e);
      }
 };
 
@@ -62,15 +81,6 @@ const handleDragOver = (event: DragEvent) => {
 
 const handleDragLeave = () => {
      isDragging.value = false;
-};
-
-const handleDrop = (event: DragEvent) => {
-     const file = event.dataTransfer?.files?.[0];
-     isDragging.value = false;
-
-     if (file) {
-          processFile(file);
-     }
 };
 
 const processFile = (file: File) => {
