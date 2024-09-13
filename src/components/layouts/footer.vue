@@ -7,16 +7,6 @@
 
           <a
                class="border-b border-foreground/30 inline-flex items-center gap-1"
-               href="https://rotato.app"
-          >
-               <Image :isAboveTheFold="true" src="/icons/icon-rotato.svg" alt="rotato" />
-               <div>Rotato</div>
-          </a>
-
-          powered by
-
-          <a
-               class="border-b border-foreground/30 inline-flex items-center gap-1"
                href="https://ffmpeg.org"
           >
                <Image :isAboveTheFold="true" src="/icons/icon-ffmpeg.svg" alt="ffmpeg" />
