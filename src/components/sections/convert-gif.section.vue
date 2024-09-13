@@ -21,9 +21,10 @@
                               <div
                                    class="rounded-2xl w-full h-full absolute top-0 left-0 overflow-hidden"
                               >
-                                   <img
+                                   <Image
                                         v-if="videoConvertToGif.gif_blob"
                                         :src="videoConvertToGif.gif_blob"
+                                        alt="gif"
                                         class="w-full saturate-0 h-full object-contain"
                                    />
 
@@ -83,6 +84,7 @@ import CardUploadVideo from '@/components/card-dragdrop.vue';
 import CardDekstop from '@/components/card-dekstop.vue';
 import Footer from '@/components/layouts/footer.vue';
 import CardInfo from '@/components/card-info.vue';
+import Image from '@/components/ui/image.vue';
 
 const router = useRouter();
 

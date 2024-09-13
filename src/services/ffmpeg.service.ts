@@ -124,6 +124,7 @@ export class FFmpegService {
                await this.ffmpeg.writeFile(file.name, await fetchFile(file));
                await this.ffmpeg.exec([`-i`, file.name, `-hide_banner`, `-v`, `verbose`]);
           } catch (err) {
+               
                console.error('Error during info:', err);
           } finally {
                loading.value = false;

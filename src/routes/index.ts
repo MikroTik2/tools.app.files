@@ -42,7 +42,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
      document.title = <string>to.meta.title;
-
+     
      if (to.path.match(/^\/https?:\/\//)) {
           const externalUrl = to.path.substring(1);
           window.location.href = externalUrl;
