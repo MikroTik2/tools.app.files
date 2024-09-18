@@ -38,39 +38,35 @@ import { ref } from 'vue';
 import { ArrowUpFromLine } from 'lucide-vue-next';
 import { ffmpegService } from '@/services/ffmpeg.service';
 
-import type { IPropsCardUploadVideo } from '@/models/card-upload-video.model';
+interface IPropsCardGragdrop {
+     title: string;
+     description: string;
+     command: string;
+}
 
 import Button from '@/components/ui/button.vue';
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const isDragging = ref<boolean>(false);
 
-const props = defineProps<IPropsCardUploadVideo>();
+const props = defineProps<IPropsCardGragdrop>();
 const emit = defineEmits(['file-selected', 'file-preview']);
 
 const handleFileChange = (event: Event) => {
-     try {
-          const input = event.target as HTMLInputElement;
-          const file = input.files?.[0];
+     const input = event.target as HTMLInputElement;
+     const file = input.files?.[0];
 
-          if (file) {
-               processFile(file);
-          }
-     } catch (e) {
-          console.log(e);
+     if (file) {
+          processFile(file);
      }
 };
 
 const handleDrop = (event: DragEvent) => {
-     try {
-          const file = event.dataTransfer?.files?.[0];
-          isDragging.value = false;
+     const file = event.dataTransfer?.files?.[0];
+     isDragging.value = false;
 
-          if (file) {
-               processFile(file);
-          }
-     } catch (e) {
-          console.log(e);
+     if (file) {
+          processFile(file);
      }
 };
 

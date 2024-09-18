@@ -76,7 +76,16 @@
 import { useDownloadFile } from '@/helpers/use-download-file.helper';
 import { Trash2 } from 'lucide-vue-next';
 
-import type { ICardInfo } from '@/models/card-info.model.ts';
+interface ICardInfo {
+     title: string;
+     size?: any;
+     stats?: number;
+     format?: string;
+     video?: any;
+     name?: any;
+     disabled: number;
+     variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+}
 
 import Button from '@/components/ui/button/Button.vue';
 

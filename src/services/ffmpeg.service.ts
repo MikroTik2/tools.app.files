@@ -4,8 +4,24 @@ import { FileTypeMap } from '@/data/constant';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import { parseDimensions, parseDuration, parseFPS } from '@/helpers/use-ffmpeg-parse.helper';
 
-import type { IVideoCompress } from '@/models/video-compress.model';
-import type { IVideoInfo } from '@/models/video-info.model';
+interface IVideoCompress {
+     size_compressed: number;
+     size_original: number;
+     name: string;
+     video_blob: any;
+};
+
+interface IVideoInfo {
+     name: string;
+     size: number;
+     last_modified: number | string;
+     type: string;
+     duration_in_seconds: number;
+     video_codec: string;
+     audio_codec: string;
+     dimensions: { width: number; height: number };
+     fps: number | null;
+};
 
 export const loading = ref<boolean>(false);
 export const progression = ref<number | null>(null);
@@ -19,11 +35,11 @@ export const videoConvertToGif = ref({
 export const videoInfo = ref<IVideoInfo>({
      name: '',
      size: 0,
-     lastModified: 0,
+     last_modified: 0,
      type: '',
-     durationInSeconds: 0,
-     videoCodec: '',
-     audioCodec: '',
+     duration_in_seconds: 0,
+     video_codec: '',
+     audio_codec: '',
      dimensions: { width: 0, height: 0 },
      fps: 0,
 });
@@ -78,12 +94,12 @@ export class FFmpegService {
                videoCompress.value.name = file.name;
                videoCompress.value.size_compressed = data.length;
                videoCompress.value.video_blob = await this.getFileUrl('.', 'output', 'mp4');
-          } catch (err) {
-               console.error('Error during compression:', err);
+          } catch (e) {
+               throw e;
           } finally {
                loading.value = false;
-          }
-     }
+          };
+     };
 
      public async convertToGif(file: File) {
           this.reset();
@@ -104,12 +120,12 @@ export class FFmpegService {
                videoConvertToGif.value.size_original = data.length;
                videoConvertToGif.value.name = 'output.gif';
                videoConvertToGif.value.gif_blob = await this.getFileUrl('.', 'output', 'gif');
-          } catch (err) {
-               console.error('Error during convert to gif:', err);
+          } catch (e) {
+               throw e;
           } finally {
                loading.value = false;
-          }
-     }
+          };
+     };
 
      public async getFileDetails(file: File) {
           this.reset();
@@ -123,9 +139,8 @@ export class FFmpegService {
 
                await this.ffmpeg.writeFile(file.name, await fetchFile(file));
                await this.ffmpeg.exec([`-i`, file.name, `-hide_banner`, `-v`, `verbose`]);
-          } catch (err) {
-               
-               console.error('Error during info:', err);
+          } catch (e) {
+               throw e;
           } finally {
                loading.value = false;
           }
@@ -135,11 +150,11 @@ export class FFmpegService {
           videoInfo.value = {
                name: '',
                size: 0,
-               lastModified: 0,
+               last_modified: 0,
                type: '',
-               durationInSeconds: 0,
-               videoCodec: '',
-               audioCodec: '',
+               duration_in_seconds: 0,
+               video_codec: '',
+               audio_codec: '',
                dimensions: { width: 0, height: 0 },
                fps: 0,
           };
@@ -199,7 +214,7 @@ export class FFmpegService {
 
      private extractFileInfo(message: string, file: File) {
           if (message.includes('Duration:')) {
-               videoInfo.value.durationInSeconds = parseDuration(
+               videoInfo.value.duration_in_seconds = parseDuration(
                     message.split('Duration:')[1].split(',')[0].trim(),
                );
           }
@@ -207,20 +222,20 @@ export class FFmpegService {
           if (message.includes('Stream #')) {
                if (message.includes('Video:')) {
                     const videoCodec = message.split('Video:')[1].split(' ')[1].split(',')[0];
-                    videoInfo.value.videoCodec = videoCodec;
+                    videoInfo.value.video_codec = videoCodec;
                     videoInfo.value.dimensions = parseDimensions(message);
                     videoInfo.value.fps = parseFPS(message);
                     videoInfo.value = {
                          ...videoInfo.value,
                          name: file.name,
                          size: file.size,
-                         lastModified: new Date(file.lastModified).toLocaleString('ru-RU'),
+                         last_modified: new Date(file.lastModified).toLocaleString('ru-RU'),
                          type: file.type,
                     };
                }
 
                if (message.includes('Audio:')) {
-                    videoInfo.value.audioCodec =
+                    videoInfo.value.audio_codec =
                          message.split('Audio:')[1].split(' ')[1] || 'No Audio';
                }
           }

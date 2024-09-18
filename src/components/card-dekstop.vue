@@ -7,17 +7,13 @@
                     class="flex justify-center lg:justify-start text-center items-center gap-2"
                     href="https://tally.so/r/w2LopM"
                >
-                    <Image
-                         src="/icons/icon-compress.svg"
-                         alt="compress-app-icon"
-                         class="w-7 h-7 sm:block hidden"
-                    />
+                    <Icon name="compress" class="w-7 h-7 hidden sm:block" />
                     <span class="border-b border-foreground/30">Compress Desktop App</span>
                </a>
 
                <div class="flex justify-center lg:justify-start gap-1 opacity-50">
-                    <Image src="/icons/icon-apple.svg" alt="apple-icon" />
-                    <Image src="/icons/icon-windows.svg" alt="windows-icon" />
+                    <Icon name="apple" />
+                    <Icon name="windows" />
                </div>
 
                <span class="text-muted-foreground lg:text-start text-center"
@@ -28,5 +24,5 @@
 </template>
 
 <script setup lang="ts">
-import Image from '@/components/ui/image.vue';
+import Icon from '@/components/ui/icon.vue';
 </script>

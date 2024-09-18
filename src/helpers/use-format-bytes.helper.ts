@@ -1,9 +1,9 @@
-export function humanFileSize(bytes: number, si: boolean = false, dp: number = 1): string {
+export function useFormatBytes(bytes: number, si: boolean = false, dp: number = 1): string {
      const thresh = si ? 1000 : 1024;
 
      if (Math.abs(bytes) < thresh) {
           return bytes + ' B';
-     }
+     };
 
      const units = ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
@@ -16,4 +16,4 @@ export function humanFileSize(bytes: number, si: boolean = false, dp: number = 1
      } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
      return bytes.toFixed(dp) + ' ' + units[u];
-}
+};

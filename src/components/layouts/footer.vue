@@ -9,7 +9,7 @@
                class="border-b border-foreground/30 inline-flex items-center gap-1"
                href="https://ffmpeg.org"
           >
-               <Image :isAboveTheFold="true" src="/icons/icon-ffmpeg.svg" alt="ffmpeg" />
+               <Icon name="ffmpeg" />
                <div>FFmpeg</div>
           </a>
 
@@ -20,5 +20,5 @@
 </template>
 
 <script setup lang="ts">
-import Image from '@/components/ui/image.vue';
+import Icon from '@/components/ui/icon.vue';
 </script>

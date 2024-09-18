@@ -51,7 +51,7 @@
                                    title="Original"
                                    variant="default"
                                    format="gif"
-                                   :size="humanFileSize(videoConvertToGif.size_original)"
+                                   :size="useFormatBytes(videoConvertToGif.size_original)"
                                    :video="videoConvertToGif.gif_blob"
                                    :name="videoConvertToGif.name"
                                    :disabled="progressionValue[0]"
@@ -74,7 +74,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { humanFileSize } from '@/helpers/use-format-bytes.helper';
+import { useFormatBytes } from '@/helpers/use-format-bytes.helper';
 import { ffmpegService, loading, progression, videoConvertToGif } from '@/services/ffmpeg.service';
 
 import Slider from '@/components/ui/slider/Slider.vue';

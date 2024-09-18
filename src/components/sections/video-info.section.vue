@@ -60,15 +60,14 @@ import Footer from '@/components/layouts/footer.vue';
 import Section from '@/components/ui/section.vue';
 import Loader from '@/components/ui/loader.vue';
 
-import type { IInfoItem } from '@/models/info-item.model';
-import type { ICardItem } from '@/models/card-items.model';
-
 import { computed, ref } from 'vue';
 import { videoInfo, loading } from '@/services/ffmpeg.service';
 
+import { useFormatBytes } from '@/helpers/use-format-bytes.helper';
+
 const fileSelected = ref<boolean>(true);
 
-const infoItems = ref<IInfoItem[]>([
+const infoItems = ref([
      { label: 'File size' },
      { label: 'Video codec' },
      { label: 'Frame rate' },
@@ -77,19 +76,19 @@ const infoItems = ref<IInfoItem[]>([
      { label: 'Last modified' },
 ]);
 
-const cardItems = computed<ICardItem[]>(() => [
+const cardItems = computed(() => [
      { label: 'File name', value: videoInfo.value.name },
-     { label: 'File size', format: 'bytes', value: videoInfo.value.size },
+     { label: 'File size', value: useFormatBytes(videoInfo.value.size) },
      { label: 'Frames per second', format: 'fps', value: videoInfo.value.fps },
      {
           label: 'Dimensions',
           format: 'px',
           value: `${videoInfo.value.dimensions.width} × ${videoInfo.value.dimensions.height}`,
      },
-     { label: 'Duration', format: 's', value: `${videoInfo.value.durationInSeconds}` },
-     { label: 'Video codec', value: videoInfo.value.videoCodec },
-     { label: 'Audio codec', value: videoInfo.value.audioCodec },
-     { label: 'Last modified', value: videoInfo.value.lastModified },
+     { label: 'Duration', format: 's', value: `${videoInfo.value.duration_in_seconds}` },
+     { label: 'Video codec', value: videoInfo.value.video_codec },
+     { label: 'Audio codec', value: videoInfo.value.audio_codec },
+     { label: 'Last modified', value: videoInfo.value.last_modified },
 ]);
 
 const handleFileSelected = (selected: boolean) => {

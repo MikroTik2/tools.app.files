@@ -66,7 +66,7 @@
                                    :size_original="videoCompress.size_original"
                                    :disabled="progressionValue[0]"
                                    @clear="handleRemove"
-                                   :size="humanFileSize(videoCompress.size_original)"
+                                   :size="useFormatBytes(videoCompress.size_original)"
                                    format="trash"
                               />
                               <CardInfo
@@ -79,7 +79,7 @@
                                              videoCompress.size_compressed,
                                         )
                                    "
-                                   :size="humanFileSize(videoCompress.size_compressed)"
+                                   :size="useFormatBytes(videoCompress.size_compressed)"
                                    :video="videoCompress.video_blob"
                                    :name="videoCompress.name"
                                    :disabled="progressionValue[0]"
@@ -101,7 +101,7 @@
 import { computed, ref } from 'vue';
 import { Pause, Play } from 'lucide-vue-next';
 import { videoCompress, ffmpegService, progression } from '@/services/ffmpeg.service';
-import { humanFileSize } from '@/helpers/use-format-bytes.helper';
+import { useFormatBytes } from '@/helpers/use-format-bytes.helper';
 import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
 
 import { useRouter } from 'vue-router';
