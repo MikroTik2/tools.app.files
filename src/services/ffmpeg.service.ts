@@ -2,7 +2,18 @@ import { ref } from 'vue';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { FileTypeMap } from '@/data/constant';
 import { fetchFile, toBlobURL } from '@ffmpeg/util';
-import { parseDimensions, parseDuration, parseFPS } from '@/helpers/use-ffmpeg-parse.helper';
+import { parseDimensions, parseDuration, parseFPS } from '@/helpers/command-parse.helper';
+
+type TypeDimension = {
+     width: number;
+     height: number;
+}
+
+interface IVideoConvertToGif {
+     size_original: number;
+     gif_blob: string;
+     name: string;
+};
 
 interface IVideoCompress {
      size_compressed: number;
@@ -19,14 +30,14 @@ interface IVideoInfo {
      duration_in_seconds: number;
      video_codec: string;
      audio_codec: string;
-     dimensions: { width: number; height: number };
      fps: number | null;
+     dimensions: TypeDimension;
 };
 
 export const loading = ref<boolean>(false);
 export const progression = ref<number | null>(null);
 
-export const videoConvertToGif = ref({
+export const videoConvertToGif = ref<IVideoConvertToGif>({
      size_original: 0,
      gif_blob: '',
      name: '',

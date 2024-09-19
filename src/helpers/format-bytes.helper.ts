@@ -1,4 +1,4 @@
-export function useFormatBytes(bytes: number, si: boolean = false, dp: number = 1): string {
+export function formatBytes(bytes: number, si: boolean = false, dp: number = 1): string {
      const thresh = si ? 1000 : 1024;
 
      if (Math.abs(bytes) < thresh) {

@@ -1,4 +1,4 @@
-export function useDownloadFile(href: string, name: string): void {
+export function downloadFile(href: string, name: string): void {
      const downloadElement = document.createElement('a');
      downloadElement.href = href;
 

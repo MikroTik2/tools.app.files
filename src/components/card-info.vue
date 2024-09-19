@@ -33,7 +33,7 @@
           <Button
                v-if="format === 'download'"
                type="button"
-               @click="useDownloadFile(props.video, props.name)"
+               @click="handleDownload"
                :disabled="props.disabled !== 1"
                :variant="props.variant"
           >
@@ -50,12 +50,7 @@
                     <Trash2 />
                </Button>
 
-               <Button
-                    type="button"
-                    @keydown.enter="useDownloadFile(props.video, props.name)"
-                    @click="useDownloadFile(props.video, props.name)"
-                    :disabled="props.disabled !== 1"
-               >
+               <Button type="button" @click="handleDownload" :disabled="props.disabled !== 1">
                     Download
                </Button>
           </div>
@@ -73,26 +68,34 @@
 </template>
 
 <script setup lang="ts">
-import { useDownloadFile } from '@/helpers/use-download-file.helper';
+import { downloadFile } from '@/helpers/download-file.helper';
 import { Trash2 } from 'lucide-vue-next';
 
 interface ICardInfo {
      title: string;
-     size?: any;
+     disabled: number;
+     size?: string;
      stats?: number;
      format?: string;
-     video?: any;
-     name?: any;
-     disabled: number;
+     video?: string;
+     name?: string;
      variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
 }
 
 import Button from '@/components/ui/button/Button.vue';
 
-const emits = defineEmits(['clear']);
 const props = defineProps<ICardInfo>();
+const emits = defineEmits<{
+     (event: 'clear'): void;
+}>();
 
 const handleRemove = () => {
      emits('clear');
+};
+
+const handleDownload = () => {
+     if (props.name && props.video) {
+          downloadFile(props.video, props.name);
+     }
 };
 </script>

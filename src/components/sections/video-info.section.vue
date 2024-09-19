@@ -8,34 +8,34 @@
                          <h1>Get video info</h1>
 
                          <ul class="list-disc mt-5 list-inside">
-                              <li v-for="(element, i) in infoItems" :key="i">
+                              <li v-for="(element, i) in videoInfoLabels" :key="i">
                                    {{ element.label }}
                               </li>
                          </ul>
                     </div>
 
-                    <CardUploadVideo
+                    <CardDragdrop
                          title="Drag and drop video file to compress"
                          description="Compression happens on your device, no data is sent to our servers"
                          command="getFileDetails"
-                         @file-selected="handleFileSelected"
+                         @file-selected="updateFileSelectionStatus"
                     />
                </div>
 
                <Loader v-else-if="loading" />
 
-               <div class="flex w-full flex-col gap-2" v-else>
+               <div v-else class="flex w-full flex-col gap-2">
                     <h1 class="text-2xl font-bold">Video information</h1>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                          <div
                               class="bg-foreground/5 p-5 border rounded-lg"
-                              v-for="(element, i) in cardItems"
+                              v-for="(element, i) in videoDetailCards"
                               :key="i"
                          >
                               <div class="flex items-top gap-[2px] group">
                                    <div>
                                         {{ element.value }}
-                                        <span class="text-muted-foreground" v-if="element.format">
+                                        <span v-if="element.format">
                                              {{ element.format }}
                                         </span>
                                    </div>
@@ -54,20 +54,30 @@
 </template>
 
 <script setup lang="ts">
-import CardUploadVideo from '@/components/card-dragdrop.vue';
+import { ref, computed } from 'vue';
+import { videoInfo, loading } from '@/services/ffmpeg.service';
+
+import { formatBytes } from '@/helpers/format-bytes.helper';
+
+import CardDragdrop from '@/components/card-dragdrop.vue';
 import Container from '@/components/ui/container.vue';
 import Footer from '@/components/layouts/footer.vue';
 import Section from '@/components/ui/section.vue';
 import Loader from '@/components/ui/loader.vue';
 
-import { computed, ref } from 'vue';
-import { videoInfo, loading } from '@/services/ffmpeg.service';
-
-import { useFormatBytes } from '@/helpers/use-format-bytes.helper';
-
 const fileSelected = ref<boolean>(true);
 
-const infoItems = ref([
+interface IVideoInfoLabels {
+     label: string;
+}
+
+interface IVideoDetailCards {
+     label: string;
+     value: string | number | null;
+     format?: string;
+}
+
+const videoInfoLabels = ref<IVideoInfoLabels[]>([
      { label: 'File size' },
      { label: 'Video codec' },
      { label: 'Frame rate' },
@@ -76,9 +86,9 @@ const infoItems = ref([
      { label: 'Last modified' },
 ]);
 
-const cardItems = computed(() => [
+const videoDetailCards = computed<IVideoDetailCards[]>(() => [
      { label: 'File name', value: videoInfo.value.name },
-     { label: 'File size', value: useFormatBytes(videoInfo.value.size) },
+     { label: 'File size', value: formatBytes(videoInfo.value.size) },
      { label: 'Frames per second', format: 'fps', value: videoInfo.value.fps },
      {
           label: 'Dimensions',
@@ -91,7 +101,7 @@ const cardItems = computed(() => [
      { label: 'Last modified', value: videoInfo.value.last_modified },
 ]);
 
-const handleFileSelected = (selected: boolean) => {
+const updateFileSelectionStatus = (selected: boolean) => {
      fileSelected.value = selected;
 };
 </script>

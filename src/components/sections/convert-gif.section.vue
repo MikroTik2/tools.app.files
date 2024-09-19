@@ -4,12 +4,12 @@
                <div class="group"></div>
 
                <div v-if="fileSelected">
-                    <CardUploadVideo
+                    <CardGragdrop
                          title="Drag and drop video file to convert"
                          description="The video-to-GIF conversion happens locally on your device; no data is sent to our servers."
                          command="convertToGif"
-                         @file-preview="handlePreviewVideo"
-                         @file-selected="handleFileSelected"
+                         @file-preview="updateVideoPreview"
+                         @file-selected="updateFileSelectionStatus"
                     />
                </div>
 
@@ -29,7 +29,7 @@
                                    />
 
                                    <video
-                                        :src="videoPreviewUrl ?? ''"
+                                        :src="videoPreviewUrl"
                                         :class="{
                                              'w-full h-full object-contain opacity-50': loading,
                                         }"
@@ -51,11 +51,11 @@
                                    title="Original"
                                    variant="default"
                                    format="gif"
-                                   :size="useFormatBytes(videoConvertToGif.size_original)"
+                                   :size="formatBytes(videoConvertToGif.size_original)"
                                    :video="videoConvertToGif.gif_blob"
                                    :name="videoConvertToGif.name"
                                    :disabled="progressionValue[0]"
-                                   @clear="handleRemove"
+                                   @clear="clearVideoData"
                               />
                          </div>
 
@@ -74,13 +74,13 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { useFormatBytes } from '@/helpers/use-format-bytes.helper';
+import { formatBytes } from '@/helpers/format-bytes.helper';
 import { ffmpegService, loading, progression, videoConvertToGif } from '@/services/ffmpeg.service';
 
 import Slider from '@/components/ui/slider/Slider.vue';
 import Container from '@/components/ui/container.vue';
 import Section from '@/components/ui/section.vue';
-import CardUploadVideo from '@/components/card-dragdrop.vue';
+import CardGragdrop from '@/components/card-dragdrop.vue';
 import CardDekstop from '@/components/card-dekstop.vue';
 import Footer from '@/components/layouts/footer.vue';
 import CardInfo from '@/components/card-info.vue';
@@ -89,21 +89,21 @@ import Image from '@/components/ui/image.vue';
 const router = useRouter();
 
 const fileSelected = ref<boolean>(true);
-const videoPreviewUrl = ref<string | null>(null);
+const videoPreviewUrl = ref<string>('');
 
 const progressionValue = computed(() => [parseFloat(Number(progression.value).toFixed(3))]);
 
-const handleFileSelected = (selected: boolean) => {
+const updateFileSelectionStatus = (selected: boolean) => {
      fileSelected.value = selected;
 };
 
-const handlePreviewVideo = (video: string) => {
+const updateVideoPreview = (video: string) => {
      videoPreviewUrl.value = video;
 };
 
-const handleRemove = () => {
+const clearVideoData = () => {
      ffmpegService.reset();
-     videoPreviewUrl.value = null;
+     videoPreviewUrl.value = '';
 
      router.push('/');
 };

@@ -20,7 +20,15 @@ import { ref } from 'vue';
 import Container from '@/components/ui/container.vue';
 import CardTool from '@/components/card-tool.vue';
 
-const toolsItems = ref([
+export interface IToolsItem {
+     title: string;
+     description: string;
+     link: string;
+     text: string;
+     tags: string[];
+}
+
+const toolsItems = ref<IToolsItem[]>([
      {
           title: 'Video file compressor',
           description: 'Compress video files by up to 90%',

@@ -1,5 +1,5 @@
-import '@/assets/main.scss';
-import '@/assets/base.scss';
+import '@/assets/styles/main.scss';
+import '@/assets/styles/base.scss';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';

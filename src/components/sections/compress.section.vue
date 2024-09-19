@@ -1,15 +1,15 @@
 <template>
      <Container>
-          <Section class="h-[inherit]">
+          <Section>
                <div class="group"></div>
 
                <div v-if="fileSelected">
-                    <CardUploadVideo
+                    <CardGragdrop
                          title="Drag and drop video file to compress"
                          description="Compression happens on your device, no data is sent to our servers"
                          command="optimizeFileSize"
-                         @file-preview="handlePreviewVideo"
-                         @file-selected="handleFileSelected"
+                         @file-preview="updateVideoPreview"
+                         @file-selected="updateFileSelectionStatus"
                     />
                </div>
 
@@ -27,12 +27,12 @@
                                         playsinline
                                         ref="videoPlayer"
                                         class="w-full saturate-0 h-full object-contain"
-                                        @timeupdate="handleUpdateSlider"
-                                        @ended="handleRestartVideo"
+                                        @timeupdate="syncSliderWithVideoTime"
+                                        @ended="restartVideoPlayback"
                                    />
 
                                    <video
-                                        :src="videoPreviewUrl ?? ''"
+                                        :src="videoPreviewUrl"
                                         :class="{
                                              'w-full h-full object-contain opacity-50':
                                                   progressionValue[0] !== 1,
@@ -44,7 +44,7 @@
                          </div>
 
                          <div class="w-full flex pt-1 items-center gap-4">
-                              <button type="button" @click="handleTrackPlayPause">
+                              <button type="button" @click="toggleVideoPlayback">
                                    <Pause class="w-5 h-5" v-if="startTrack" />
                                    <Play class="w-5 h-5" v-else />
                               </button>
@@ -54,7 +54,7 @@
                                    :max="1000"
                                    :min="0"
                                    v-if="progressionValue[0] === 1"
-                                   @update:model-value="handleSliderChange"
+                                   @update:model-value="updateVideoTimeFromSlider"
                               />
                               <Slider v-model="progressionValue" :max="1" :min="0" v-else />
                          </div>
@@ -65,8 +65,8 @@
                                    variant="secondary"
                                    :size_original="videoCompress.size_original"
                                    :disabled="progressionValue[0]"
-                                   @clear="handleRemove"
-                                   :size="useFormatBytes(videoCompress.size_original)"
+                                   @clear="clearVideoData"
+                                   :size="formatBytes(videoCompress.size_original)"
                                    format="trash"
                               />
                               <CardInfo
@@ -74,12 +74,12 @@
                                    variant="default"
                                    format="download"
                                    :stats="
-                                        useCompressionStats(
+                                        compressionPercentage(
                                              videoCompress.size_original,
                                              videoCompress.size_compressed,
                                         )
                                    "
-                                   :size="useFormatBytes(videoCompress.size_compressed)"
+                                   :size="formatBytes(videoCompress.size_compressed)"
                                    :video="videoCompress.video_blob"
                                    :name="videoCompress.name"
                                    :disabled="progressionValue[0]"
@@ -101,13 +101,13 @@
 import { computed, ref } from 'vue';
 import { Pause, Play } from 'lucide-vue-next';
 import { videoCompress, ffmpegService, progression } from '@/services/ffmpeg.service';
-import { useFormatBytes } from '@/helpers/use-format-bytes.helper';
-import { useCompressionStats } from '@/helpers/use-compression-stats.helper';
+import { formatBytes } from '@/helpers/format-bytes.helper';
+import { compressionPercentage } from '@/helpers/compression-percentage.helper';
 
 import { useRouter } from 'vue-router';
 
 import CardInfo from '@/components/card-info.vue';
-import CardUploadVideo from '@/components/card-dragdrop.vue';
+import CardGragdrop from '@/components/card-dragdrop.vue';
 import CardDekstop from '@/components/card-dekstop.vue';
 import Slider from '@/components/ui/slider/Slider.vue';
 import Container from '@/components/ui/container.vue';
@@ -115,7 +115,7 @@ import Footer from '@/components/layouts/footer.vue';
 import Section from '@/components/ui/section.vue';
 
 const videoPlayer = ref<HTMLVideoElement | null>(null);
-const videoPreviewUrl = ref<string | null>(null);
+const videoPreviewUrl = ref<string>('');
 const fileSelected = ref<boolean>(true);
 const videoSlide = ref<number[]>([0]);
 const startTrack = ref<boolean>(false);
@@ -124,28 +124,28 @@ const progressionValue = computed(() => [parseFloat(Number(progression.value).to
 
 const router = useRouter();
 
-const handleRemove = () => {
+const updateVideoPreview = (video: string) => {
+     videoPreviewUrl.value = video;
+};
+
+const updateFileSelectionStatus = (selected: boolean) => {
+     fileSelected.value = selected;
+};
+
+const clearVideoData = () => {
      ffmpegService.reset();
-     videoPreviewUrl.value = null;
+     videoPreviewUrl.value = '';
 
      router.push('/');
 };
 
-const handlePreviewVideo = (video: string) => {
-     videoPreviewUrl.value = video;
-};
-
-const handleFileSelected = (selected: boolean) => {
-     fileSelected.value = selected;
-};
-
-const handleSliderChange = (value: number[] | undefined) => {
+const updateVideoTimeFromSlider = (value: number[] | undefined) => {
      if (videoPlayer.value && value && value.length > 0) {
           videoPlayer.value.currentTime = (value[0] / 1000) * videoPlayer.value.duration;
      }
 };
 
-const handleTrackPlayPause = () => {
+const toggleVideoPlayback = () => {
      if (videoPlayer.value) {
           if (startTrack.value) {
                videoPlayer.value.pause();
@@ -157,14 +157,14 @@ const handleTrackPlayPause = () => {
      }
 };
 
-const handleRestartVideo = () => {
+const restartVideoPlayback = () => {
      if (videoPlayer.value) {
           videoPlayer.value.currentTime = 0;
           videoPlayer.value.play();
      }
 };
 
-const handleUpdateSlider = () => {
+const syncSliderWithVideoTime = () => {
      if (videoPlayer.value) {
           videoSlide.value = [(videoPlayer.value.currentTime / videoPlayer.value.duration) * 1000];
      }
